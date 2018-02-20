@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {d3Floorplan} from '../../../assets/js/d3-floorplan';
+import { MapService } from '../../services/map.service';
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -7,7 +9,7 @@ import {d3Floorplan} from '../../../assets/js/d3-floorplan';
 })
 export class MapComponent implements OnInit {
 
-  constructor() { }
+  constructor(private map: MapService) { }
 
   ngOnInit() {
 
