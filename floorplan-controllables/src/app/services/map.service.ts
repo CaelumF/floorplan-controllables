@@ -24,11 +24,8 @@ export class MapService {
           .floorplan()
           .xScale(xscale)
           .yScale(yscale),
-        imagelayer = d3.floorplan.imagelayer(),
-        heatmap = d3.floorplan.heatmap(),
-        vectorfield = d3.floorplan.vectorfield(),
-        pathplot = d3.floorplan.pathplot(),
-        overlays = d3.floorplan.overlays().editMode(true),
+        imagelayer = d3.floorplan.imagelayer().title("Floorplan"),
+        heatmap = d3.floorplan.heatmap().title("Lights"),
         mapdata = {};
 
       mapdata[imagelayer.id()] = [
@@ -48,16 +45,11 @@ export class MapService {
 
       map
         .addLayer(imagelayer)
-        .addLayer(heatmap)
-        .addLayer(vectorfield)
-        .addLayer(pathplot)
-        .addLayer(overlays);
+        .addLayer(heatmap);
+
 
       var loadData = function(data) {
         mapdata[heatmap.id()] = data.heatmap;
-        mapdata[overlays.id()] = data.overlays;
-        mapdata[vectorfield.id()] = data.vectorfield;
-        mapdata[pathplot.id()] = data.pathplot;
 
         d3
           .select('#demo')
@@ -69,11 +61,6 @@ export class MapService {
       };
 
       loadData(jsonData);
-      d3.selectAll('.heatmap rect').on('click', (d, i) => {
-        console.log(`Clicked ${JSON.stringify(d)} with ${i}`);
-        const t = d3.select()
-      })
-
     });
   }
 }
