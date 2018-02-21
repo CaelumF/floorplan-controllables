@@ -24,8 +24,8 @@ export class MapService {
           .floorplan()
           .xScale(xscale)
           .yScale(yscale),
-        imagelayer = d3.floorplan.imagelayer().title("Floorplan"),
-        heatmap = d3.floorplan.heatmap().title("Lights"),
+        imagelayer = d3.floorplan.imagelayer().title('Floorplan'),
+        heatmap = d3.floorplan.heatmap().title('Lights'),
         mapdata = {};
 
       mapdata[imagelayer.id()] = [
@@ -47,7 +47,6 @@ export class MapService {
         .addLayer(imagelayer)
         .addLayer(heatmap);
 
-
       var loadData = function(data) {
         mapdata[heatmap.id()] = data.heatmap;
 
@@ -59,8 +58,41 @@ export class MapService {
           .datum(mapdata)
           .call(map);
       };
-
+      // Identify lights with classes
       loadData(jsonData);
+      d3.selectAll('.heatmap rect').classed('light', true);
+
+      d3.selectAll('.light').on('click', function(d, i) {
+        const parentNode = d3.select(this.parentNode);
+        const buttonX = 0;
+        const buttonY = 0;
+        const lightInterface = parentNode.append('g');
+        lightInterface.append('rect')
+        .attr('height', 87)
+        .attr('width', 220)
+        .classed('light-settings', true);
+        d3.event.stopPropagation();
+
+        // Close popup appropriately
+        let cursorOverInterface: Boolean = false;
+        lightInterface.on('mouseout', function(test) {
+          cursorOverInterface = false;
+        });
+        lightInterface.on('mousein', function(test) {
+          cursorOverInterface = true;
+        });
+        d3.select(document).on('click', function() {
+          if (!cursorOverInterface) {lightInterface.remove(); }
+        });
+        lightInterface
+        .append('text')
+        .text(`Status: ${d.status}`)
+        .attr('x', buttonX + 20)
+        .attr('y', buttonY + 40)
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', '20px')
+        .attr('fill', 'blue');
+      });
     });
   }
 }
