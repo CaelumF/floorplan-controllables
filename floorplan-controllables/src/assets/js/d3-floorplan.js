@@ -256,7 +256,7 @@ d3.floorplan.heatmap = function() {
                 .attr("class", function(d) { return "d6-" + colorScale(d.value); })
                 .select("title")
                 .text(function(d) {
-                    return "value: " + format(d.value) + data.units;
+                    return heatmap.tooltipper(d) || "values: " + format(d.value) + data.units;
                 });
 
             cellsEnter.transition().style("opacity", 0.6);
@@ -275,7 +275,7 @@ d3.floorplan.heatmap = function() {
                 .attr("class", function(d) { return "d6-" + colorScale(d.value); })
                 .select("title")
                 .text(function(d) {
-                    return "value: " + format(d.value) + data.units;
+                    return heatmap.tooltipper(d) || "value: " + format(d.value) + data.units;
                 });
             areasEnter.transition().style("opacity", 0.6);
 
@@ -341,6 +341,8 @@ d3.floorplan.heatmap = function() {
         customThresholds = vals;
         return heatmap;
     };
+
+    heatmap.tooltipper = function(d) { return undefined }
 
     heatmap.id = function() {
         return id;
