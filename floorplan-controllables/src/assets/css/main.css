@@ -35,8 +35,6 @@
 .heatmap rect .d6-1 {}
 
 .light-settings {
-    width: 300px;
-    height: 300px;
     fill: rgb(199, 56, 49);
     background: #D73027;
 }
