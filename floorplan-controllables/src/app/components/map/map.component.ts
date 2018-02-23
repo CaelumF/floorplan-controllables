@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {d3Floorplan} from '../../../assets/js/d3-floorplan';
 import { MapService } from '../../services/map.service';
 
 @Component({

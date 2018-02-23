@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import { debug } from 'util';
-
-import * as d3t from 'd3';
 import * as $ from 'jquery';
-// / <reference types="jquery"/>
-// import * as $ from 'jquery'
-// / <reference types="d3"/>
-// import { Selection } from 'd3';
+import * as d3t from 'd3';
 import fcConfig from '../../assets/js/fcConfig.js';
-import { BaseEvent } from 'd3';
-
+declare var d3: typeof d3t;
 @Injectable()
 export class MapService {
   constructor() {
