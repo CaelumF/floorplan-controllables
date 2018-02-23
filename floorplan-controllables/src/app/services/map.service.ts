@@ -1,33 +1,39 @@
 import { Injectable } from '@angular/core';
 import { debug } from 'util';
 
+import * as d3t from 'd3';
+import * as $ from 'jquery';
+// / <reference types="jquery"/>
+// import * as $ from 'jquery'
+// / <reference types="d3"/>
+// import { Selection } from 'd3';
+import fcConfig from '../../assets/js/fcConfig.js';
+import { BaseEvent } from 'd3';
+
 @Injectable()
 export class MapService {
   constructor() {
     $(function() {
-      var jsonData = {
+      const jsonData = {
         heatmap: {
           binSize: fcConfig.lightScale,
           map: fcConfig.currentFloorplan.currentLightConfig.lights
         }
       };
-
-      var xscale = d3.scale
+      const d3a: typeof d3t = d3;
+      const xscale = d3a.scale
           .linear()
           .domain([0, 50.0])
           .range([0, 720]),
-        yscale = d3.scale
+        yscale = d3a.scale
           .linear()
           .domain([0, 33.79])
           .range([0, 487]),
-        map = d3
-          .floorplan()
-          .xScale(xscale)
+        map = d3.floorplan().xScale(xscale)
           .yScale(yscale),
         imagelayer = d3.floorplan.imagelayer().title('Floorplan'),
         heatmap = d3.floorplan.heatmap().title('Lights'),
         mapdata = {};
-
       mapdata[imagelayer.id()] = [
         {
           url: fcConfig.currentFloorplan.imageURL,
@@ -42,15 +48,14 @@ export class MapService {
       heatmap.tooltipper = function(d) {
         return d.status || 'NO STATUS';
       };
-
       map
         .addLayer(imagelayer)
         .addLayer(heatmap);
 
-      var loadData = function(data) {
+      const loadData = function(data) {
         mapdata[heatmap.id()] = data.heatmap;
 
-        d3
+        d3a
           .select('#demo')
           .append('svg')
           .attr('height', 487)
@@ -60,10 +65,10 @@ export class MapService {
       };
       // Identify lights with classes
       loadData(jsonData);
-      d3.selectAll('.heatmap rect').classed('light', true);
+      d3a.selectAll('.heatmap rect').classed('light', true);
 
-      d3.selectAll('.light').on('click', function(d, i) {
-        const parentNode = d3.select(this.parentNode);
+      d3a.selectAll('.light').on('click', function(d, i) {
+        const parentNode = d3a.select(this.parentNode);
         const buttonX = 0;
         const buttonY = 0;
         const lightInterface = parentNode.append('g');
@@ -71,7 +76,7 @@ export class MapService {
         .attr('height', 87)
         .attr('width', 220)
         .classed('light-settings', true);
-        d3.event.stopPropagation();
+        (d3a.event as Event).stopPropagation();
 
         // Close popup appropriately
         let cursorOverInterface: Boolean = false;
@@ -81,9 +86,10 @@ export class MapService {
         lightInterface.on('mousein', function(test) {
           cursorOverInterface = true;
         });
-        d3.select(document).on('click', function() {
+        d3a.select(document).on('click', function() {
           if (!cursorOverInterface) {lightInterface.remove(); }
         });
+
         lightInterface
         .append('text')
         .text(`Status: ${d.status}`)

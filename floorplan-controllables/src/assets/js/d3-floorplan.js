@@ -514,7 +514,3 @@ d3.floorplan.pathplot = function() {
     };
     return a
 };
-
-var d3Floorplan = d3.floorplan;
-
-//Test hack, move to controller later
