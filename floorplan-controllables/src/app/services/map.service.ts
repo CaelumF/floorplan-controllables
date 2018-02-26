@@ -3,6 +3,15 @@ import { debug } from 'util';
 import * as $ from 'jquery';
 import * as d3t from 'd3';
 import fcConfig from '../../assets/js/fcConfig.js';
+
+declare module 'd3'{
+  namespace floorplan{
+    function imagelayer() : any
+    function heatmap() : any
+  }
+  function floorplan(): any
+}
+
 declare var d3: typeof d3t;
 @Injectable()
 export class MapService {
@@ -14,12 +23,11 @@ export class MapService {
           map: fcConfig.currentFloorplan.currentLightConfig.lights
         }
       };
-      const d3a: typeof d3t = d3;
-      const xscale = d3a.scale
+      const xscale = d3.scale
           .linear()
           .domain([0, 50.0])
           .range([0, 720]),
-        yscale = d3a.scale
+        yscale = d3.scale
           .linear()
           .domain([0, 33.79])
           .range([0, 487]),
@@ -49,7 +57,7 @@ export class MapService {
       const loadData = function(data) {
         mapdata[heatmap.id()] = data.heatmap;
 
-        d3a
+        d3
           .select('#demo')
           .append('svg')
           .attr('height', 487)
@@ -59,10 +67,10 @@ export class MapService {
       };
       // Identify lights with classes
       loadData(jsonData);
-      d3a.selectAll('.heatmap rect').classed('light', true);
+      d3.selectAll('.heatmap rect').classed('light', true);
 
-      d3a.selectAll('.light').on('click', function(d, i) {
-        const parentNode = d3a.select(this.parentNode);
+      d3.selectAll('.light').on('click', function(d, i) {
+        const parentNode = d3.select(this.parentNode);
         const buttonX = 0;
         const buttonY = 0;
         const lightInterface = parentNode.append('g');
@@ -70,7 +78,7 @@ export class MapService {
         .attr('height', 87)
         .attr('width', 220)
         .classed('light-settings', true);
-        (d3a.event as Event).stopPropagation();
+        (d3.event as Event).stopPropagation();
 
         // Close popup appropriately
         let cursorOverInterface: Boolean = false;
@@ -80,7 +88,7 @@ export class MapService {
         lightInterface.on('mousein', function(test) {
           cursorOverInterface = true;
         });
-        d3a.select(document).on('click', function() {
+        d3.select(document).on('click', function() {
           if (!cursorOverInterface) {lightInterface.remove(); }
         });
 
