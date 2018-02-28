@@ -4,12 +4,12 @@ import * as $ from 'jquery';
 import * as d3t from 'd3';
 import fcConfig from '../../assets/js/fcConfig.js';
 
-declare module 'd3'{
-  namespace floorplan{
-    function imagelayer() : any
-    function heatmap() : any
+declare module 'd3' {
+  namespace floorplan {
+    function imagelayer(): any;
+    function heatmap(): any;
   }
-  function floorplan(): any
+  function floorplan(): any;
 }
 
 declare var d3: typeof d3t;
