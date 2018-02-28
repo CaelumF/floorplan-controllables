@@ -5,11 +5,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
 import { MapService } from './services/map.service';
+import { LightInterfaceComponent } from './components/light-interface/light-interface.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    LightInterfaceComponent
   ],
   imports: [
     BrowserModule

@@ -11,7 +11,6 @@ declare module 'd3' {
   }
   function floorplan(): any;
 }
-
 declare var d3: typeof d3t;
 @Injectable()
 export class MapService {
@@ -57,8 +56,7 @@ export class MapService {
       const loadData = function(data) {
         mapdata[heatmap.id()] = data.heatmap;
 
-        d3
-          .select('#demo')
+        d3.select('#demo')
           .append('svg')
           .attr('height', 487)
           .attr('width', 720)
