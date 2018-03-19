@@ -1,8 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { debug } from 'util';
+import { DOCUMENT } from '@angular/common';
 import * as $ from 'jquery';
 import * as d3t from 'd3';
 import fcConfig from '../../assets/js/fcConfig.js';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { LightInterfaceComponent } from '../components/light-interface/light-interface.component';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 
 declare module 'd3' {
   namespace floorplan {
@@ -11,10 +18,36 @@ declare module 'd3' {
   }
   function floorplan(): any;
 }
+
 declare var d3: typeof d3t;
 @Injectable()
-export class MapService {
-  constructor() {
+export class MapService implements OnInit, OnDestroy {
+  private subscription: Subscription;
+
+  openDialog(options): void {
+    this.dialog.open(LightInterfaceComponent, {
+      data: options, hasBackdrop: true
+    });
+  }
+  ngOnInit() {
+    alert('Map service inited');
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  constructor(public dialog: MatDialog, @Inject(DOCUMENT) private docuent: any) {
+    let openingDialogOptions = null;
+    // Timer to open Material popup from the correct context
+    const timer = TimerObservable.create(10, 10);
+    this.subscription = timer.subscribe(t => {
+      if (openingDialogOptions != null) {
+        this.openDialog(openingDialogOptions);
+        openingDialogOptions = null;
+      }
+    });
+
     $(function() {
       const jsonData = {
         heatmap: {
@@ -60,44 +93,17 @@ export class MapService {
           .append('svg')
           .attr('height', 487)
           .attr('width', 720)
+          // .style('height', '100vh')
+          // .style('width', '100vw')
           .datum(mapdata)
           .call(map);
       };
       // Identify lights with classes
       loadData(jsonData);
       d3.selectAll('.heatmap rect').classed('light', true);
-
+      const h = docuent.querySelector('.light');
       d3.selectAll('.light').on('click', function(d, i) {
-        const parentNode = d3.select(this.parentNode);
-        const buttonX = 0;
-        const buttonY = 0;
-        const lightInterface = parentNode.append('g');
-        lightInterface.append('rect')
-        .attr('height', 87)
-        .attr('width', 220)
-        .classed('light-settings', true);
-        (d3.event as Event).stopPropagation();
-
-        // Close popup appropriately
-        let cursorOverInterface: Boolean = false;
-        lightInterface.on('mouseout', function(test) {
-          cursorOverInterface = false;
-        });
-        lightInterface.on('mousein', function(test) {
-          cursorOverInterface = true;
-        });
-        d3.select(document).on('click', function() {
-          if (!cursorOverInterface) {lightInterface.remove(); }
-        });
-
-        lightInterface
-        .append('text')
-        .text(`Status: ${d.status}`)
-        .attr('x', buttonX + 20)
-        .attr('y', buttonY + 40)
-        .attr('font-family', 'sans-serif')
-        .attr('font-size', '20px')
-        .attr('fill', 'blue');
+        openingDialogOptions = { d1: d, i1: i};
       });
     });
   }

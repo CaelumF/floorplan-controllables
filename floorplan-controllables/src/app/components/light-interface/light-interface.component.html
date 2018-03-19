@@ -1,3 +1,17 @@
-<p>
-  light-interface works!
-</p>
+<h2 mat-dialog-title>{{data.d1.id}}</h2>
+<mat-dialog-content>
+
+    <table>
+        <tr>
+            <td>on: {{data.d1.on}}</td>
+            <td></td>
+            <td>
+                <mat-slide-toggle [checked]="data.d1.on" [(ngModel)]="data.d1.on"></mat-slide-toggle>
+            </td>
+        </tr>
+    </table>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

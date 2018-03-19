@@ -7,12 +7,12 @@ let fcConfig = {
             //Locations and properties of lights
             lightConfigs: {
                 default: {
-                    lights: [+{ x: 12, y: 12, id: "KITCHEN_LIGHT1", status: "OFF" },
-                        { x: 32, y: 12, id: "LIVING_ROOM_LIGHT1", status: "OFF" },
-                        { x: 22.2, y: 14.5, id: "LIVING_ROOM_LIGHT2", status: "OFF" },
+                    lights: [{ x: 12, y: 12, id: "KITCHEN_LIGHT1", on: true, group: 'living room' },
+                        { x: 32, y: 12, id: "LIVING_ROOM_LIGHT1", on: false },
+                        { x: 22.2, y: 14.5, id: "LIVING_ROOM_LIGHT2", on: false },
                     ],
                     groups: [
-
+                        'living room'
                     ]
                 }
             },
